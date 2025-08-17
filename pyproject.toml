@@ -1,3 +1,2 @@
-[tool.poetry.dependencies]
-python = "^3.11"
-discord.py = "^2.3.3" 
+[tool.nixpacks]
+python = "3.11"
