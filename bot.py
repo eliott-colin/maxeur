@@ -33,6 +33,19 @@ async def maxeur(interaction: discord.Interaction, user: discord.Member):
         json.dump(points, f)
     await interaction.response.send_message(f"{user.mention} a maintenant {points[user_id]} point(s) ! ✅")
 
+# Command to remove points from a user
+@bot.tree.command(name="minceur", description="Retire un point à un utilisateur")
+@app_commands.describe(user="Utilisateur à qui retirer un point")
+async def minceur(interaction: discord.Interaction, user: discord.Member):
+    user_id = str(user.id)
+    if user_id in points and points[user_id] > 0:
+        points[user_id] -= 1
+        with open(POINTS_FILE, "w") as f:
+            json.dump(points, f)
+        await interaction.response.send_message(f"{user.mention} a maintenant {points[user_id]} point(s) ! ❌")
+    else:
+        await interaction.response.send_message(f"{user.mention} n'a pas de points à retirer !")
+
 # Command to check points of a user
 @bot.tree.command(name="points", description="Vérifie le nombre de points d'un utilisateur")
 @app_commands.describe(user="Utilisateur dont vérifier les points")
@@ -55,5 +68,13 @@ async def leaderboard(interaction: discord.Interaction):
             leaderboard_message += f"{i}. {user.mention} - {user_points} point(s)\n"
     
     await interaction.response.send_message(leaderboard_message)
+
+# Commande pour reset le leaderboard (tout le monde peut le faire)
+@bot.tree.command(name="resetleaderboard", description="Réinitialise tous les points du leaderboard")
+async def reset_leaderboard(interaction: discord.Interaction):
+    points.clear()
+    with open("points.json", "w") as f:
+        json.dump(points, f)
+    await interaction.response.send_message("✅ Le leaderboard a été réinitialisé par {0.mention} !".format(interaction.user))
 
 bot.run(os.getenv("TOKEN"))
