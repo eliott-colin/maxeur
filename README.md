@@ -21,6 +21,7 @@ Il utilise les commandes slash (`/`) pour interagir avec les utilisateurs.
    git clone https://github.com/eliott-colin/maxeur.git
    cd maxeur
    ```
+   
 
 2. Installez les dépendances :
    ```bash
